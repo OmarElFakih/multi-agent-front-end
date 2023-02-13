@@ -15,7 +15,7 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 //actions
-import { openUserSidebar, setFullUser } from "../../../redux/actions";
+import { openUserSidebar, setFullUser, chatUser } from "../../../redux/actions";
 
 //Import Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -35,11 +35,17 @@ function UserChat(props) {
 
     //demo conversation messages
     //userType must be required
-    const [allUsers] = useState(props.recentChatList);
-    const [chatMessages, setchatMessages] = useState(props.recentChatList[props.active_user].messages);
+    const [allUsers, setAllUsers] = useState([]) /*useState(props.recentChatList)*/;
+    const [chatMessages, setchatMessages] = useState([]) /*useState(props.recentChatList[props.active_user].messages)*/;
 
     useEffect(() => {
-        setchatMessages(props.recentChatList[props.active_user].messages);
+        //console.log(props.recentChatList);
+        if(props.recentChatList.length !== 0){
+            setchatMessages(props.recentChatList[props.active_user].messages);
+        } else{
+            setchatMessages([]);
+        }
+        setAllUsers(props.recentChatList)
         ref.current.recalculate();
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
@@ -375,5 +381,5 @@ const mapStateToProps = (state) => {
     return { active_user, userSidebar };
 };
 
-export default withRouter(connect(mapStateToProps, { openUserSidebar, setFullUser })(UserChat));
+export default withRouter(connect(mapStateToProps, { openUserSidebar, setFullUser, chatUser })(UserChat));
 

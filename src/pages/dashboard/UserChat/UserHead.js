@@ -50,7 +50,7 @@ function UserHead(props) {
                                 <Link to="#" onClick={(e) => closeUserChat(e)} className="user-chat-remove text-muted font-size-16 p-2">
                                     <i className="ri-arrow-left-s-line"></i></Link>
                             </div>
-                            {
+                            {/*
                                 props.users[props.active_user].profilePicture !== "Null" ?
                                     <div className="me-3 ms-0">
                                         <img src={props.users[props.active_user].profilePicture} className="rounded-circle avatar-xs" alt="chatvia" />
@@ -62,14 +62,14 @@ function UserHead(props) {
                                             </span>
                                         </div>
                                     </div>
-                            }
+                            */}
 
                             <div className="flex-grow-1 overflow-hidden">
                                 <h5 className="font-size-16 mb-0 text-truncate">
                                     <Link to="#" onClick={(e) => openUserSidebar(e)} className="text-reset user-profile-show">
-                                        {props.users[props.active_user].name}
+                                        {/*props.users[props.active_user].name*/}
                                     </Link>
-                                    {(() => {
+                                    {/*(() => {
                                         switch (props.users[props.active_user].status) {
                                             case "online":
                                                 return (
@@ -95,7 +95,7 @@ function UserHead(props) {
                                             default:
                                                 return;
                                         }
-                                    })()}
+                                    })()*/}
 
                                 </h5>
                             </div>

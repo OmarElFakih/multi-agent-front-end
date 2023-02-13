@@ -7,10 +7,13 @@ import { connect } from "react-redux";
 import SimpleBar from "simplebar-react";
 
 //actions
-import { setconversationNameInOpenChat, activeUser } from "../../../redux/actions"
+import { setconversationNameInOpenChat, activeUser, addLoggedinUser } from "../../../redux/actions"
 
 //components
-import OnlineUsers from "./OnlineUsers";
+//import OnlineUsers from "./OnlineUsers";
+
+// let testUser =  { id:66, name : "Test User", profilePicture : "Null", status : "online",unRead : 0, isGroup: false, number:"12345", 
+// messages: []  }
 
 class Chats extends Component {
     constructor(props) {
@@ -21,6 +24,7 @@ class Chats extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.openUserChat = this.openUserChat.bind(this);
+        // this.props.addLoggedinUser(testUser)
     }
 
     componentDidMount() {
@@ -28,6 +32,7 @@ class Chats extends Component {
         if (li) {
             li.classList.add("active");
         }
+        
     }
 
     componentDidUpdate(prevProps) {
@@ -131,7 +136,7 @@ class Chats extends Component {
                     </div>
 
                     {/* online users */}
-                    <OnlineUsers />
+                    {/* <OnlineUsers /> */}
 
                     {/* Start chat-message-list  */}
                     <div className="px-2">
@@ -220,4 +225,4 @@ const mapStateToProps = (state) => {
     return { active_user };
 };
 
-export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser })(Chats);
+export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, addLoggedinUser })(Chats);

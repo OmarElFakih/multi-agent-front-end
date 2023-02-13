@@ -6,7 +6,18 @@ import UserChat from "./UserChat/";
 import { connect } from "react-redux";
 
 
+
+import { addLoggedinUser } from '../../redux/actions';
+
+let testUser2 =  {id: 55, name : "Test User 2", profilePicture : "Null", status : "online",unRead : 0, isGroup: false, number:"12345", 
+messages: []  }
+
+
 class Index extends Component {
+    componentDidMount(){
+        this.props.addLoggedinUser(testUser2);
+    }
+    
     render() {
 
         return (
@@ -27,4 +38,4 @@ const mapStateToProps = (state) => {
     return { users };
 };
 
-export default connect(mapStateToProps, {})(Index);
+export default connect(mapStateToProps, {addLoggedinUser})(Index);
