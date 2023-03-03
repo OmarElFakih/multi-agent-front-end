@@ -15,7 +15,7 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 //actions
-import { openUserSidebar, setFullUser, chatUser } from "../../../redux/actions";
+import { openUserSidebar, setFullUser, chatUser, addLoggedinUser } from "../../../redux/actions";
 
 //Import Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -42,6 +42,7 @@ function UserChat(props) {
         //console.log(props.recentChatList);
         if(props.recentChatList.length !== 0){
             setchatMessages(props.recentChatList[props.active_user].messages);
+            console.log(props.recentChatList[props.active_user]);
         } else{
             setchatMessages([]);
         }
@@ -72,6 +73,13 @@ function UserChat(props) {
                     isFileMessage: false,
                     isImageMessage: false
                 }
+                let data = {
+                    type: "message",
+                    message: message,
+                    client_number: props.recentChatList[props.active_user].client_number,
+                    timestamp: Math.floor(Date.now() / 1000)
+                }
+                props.wsClient.send(JSON.stringify(data))
                 break;
 
             case "fileMessage":
@@ -138,6 +146,51 @@ function UserChat(props) {
         setchatMessages(filtered);
     }
 
+    props.wsClient.onmessage = function(e){
+        if (typeof e.data === 'string') {
+            let message_data = JSON.parse(e.data);
+    
+            let found = props.recentChatList.find(user => user.client_number === message_data.client_number);
+            
+            let d = new Date();
+            let n = d.getSeconds();
+            
+            
+            let mesObj = {
+                id: 0,
+                message: message_data.message,
+                time: "00:" + n,
+                userType: "receiver",
+                isImageMessage: false,
+                isFileMessage: false
+            }
+    
+            if (found != null){
+              
+                mesObj.id = found.messages.length + 1;
+                found.messages = [...found.messages, mesObj];
+                found.unRead += 1;
+                let copyallUsers = [...allUsers];
+                props.setFullUser(copyallUsers);
+
+                scrolltoBottom();
+                    
+            }else{
+                let new_user = {
+                    id: props.recentChatList.length,
+                    name: message_data.client_profile_name,
+                    profilePicture: "Null",
+                    status: "online",
+                    unRead: 1,
+                    isGroup: false,
+                    client_number: message_data.client_number,
+                    messages: [mesObj]
+                }
+                
+                props.addLoggedinUser(new_user);
+            }
+        }
+    }
 
     return (
         <React.Fragment>
@@ -381,5 +434,5 @@ const mapStateToProps = (state) => {
     return { active_user, userSidebar };
 };
 
-export default withRouter(connect(mapStateToProps, { openUserSidebar, setFullUser, chatUser })(UserChat));
+export default withRouter(connect(mapStateToProps, { openUserSidebar, setFullUser, chatUser, addLoggedinUser })(UserChat));
 

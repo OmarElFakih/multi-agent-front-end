@@ -9,13 +9,31 @@ import { connect } from "react-redux";
 
 import { addLoggedinUser } from '../../redux/actions';
 
-let testUser2 =  {id: 55, name : "Test User 2", profilePicture : "Null", status : "online",unRead : 0, isGroup: false, number:"12345", 
-messages: []  }
+import { w3cwebsocket as W3CWebsSocket} from 'websocket';
+
+//use wss for production, ws for local testing
+const wsClient = new W3CWebsSocket("ws:localhost:8000/ws");
+
+
+wsClient.onopen = function() {
+    console.log("connected");
+    let data = {
+        type: "connection",
+        business_number_id: "105046999163958"        
+    }
+    wsClient.send(JSON.stringify(data));
+}
+
+wsClient.onerror = function() {
+    console.log('Connection Error');
+};
+
+
 
 
 class Index extends Component {
     componentDidMount(){
-        this.props.addLoggedinUser(testUser2);
+        
     }
     
     render() {
@@ -26,7 +44,7 @@ class Index extends Component {
                 <ChatLeftSidebar recentChatList={this.props.users} />
 
                 {/* user chat */}
-                <UserChat recentChatList={this.props.users} />
+                <UserChat recentChatList={this.props.users} wsClient={wsClient}/>
 
             </React.Fragment>
         );
