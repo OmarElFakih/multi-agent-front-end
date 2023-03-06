@@ -14,6 +14,8 @@ function ChatLeftSidebar(props) {
 
     const activeTab = props.activeTab;
 
+    
+
     return (
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
@@ -22,7 +24,7 @@ function ChatLeftSidebar(props) {
                     {/* Start Profile tab-pane */}
                     <TabPane tabId="profile" id="pills-user">
                         {/* profile content  */}
-                        <Profile />
+                        <Profile user={props.user}/>
                     </TabPane>
                     {/* End Profile tab-pane  */}
 
@@ -50,7 +52,7 @@ function ChatLeftSidebar(props) {
                     {/* Start settings tab-pane */}
                     <TabPane tabId="settings" id="pills-setting">
                         {/* Settings content */}
-                        <Settings />
+                        <Settings user={props.user}/>
                     </TabPane>
                     {/* End settings tab-pane */}
                 </TabContent>

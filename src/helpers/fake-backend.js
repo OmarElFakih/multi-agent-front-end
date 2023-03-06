@@ -4,7 +4,10 @@ import MockAdapter from 'axios-mock-adapter';
 const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcnRoZW1lcyIsImlhdCI6MTU4NzM1NjY0OSwiZXhwIjoxOTAyODg5NDQ5LCJhdWQiOiJjb2RlcnRoZW1lcy5jb20iLCJzdWIiOiJzdXBwb3J0QGNvZGVydGhlbWVzLmNvbSIsImxhc3ROYW1lIjoiVGVzdCIsIkVtYWlsIjoic3VwcG9ydEBjb2RlcnRoZW1lcy5jb20iLCJSb2xlIjoiQWRtaW4iLCJmaXJzdE5hbWUiOiJIeXBlciJ9.P27f7JNBF-vOaJFpkn-upfEh3zSprYfyhTOYhijykdI';
 
 let users = [
-    { id: 1, name: 'Chatvia', username: 'themesbrand', password: '123456', email: 'admin@themesbrand.com', role: 'role', token: token }
+    { id: 1, name: 'Admin01', username: 'admin01', password: '123456', email: 'admin01@fonlogic.com', role: 'admin', business_number_id: '105046999163958', token: token },
+    { id: 2, name: 'Admin02', username: 'admin02', password: '123456', email: 'admin02@fonlogic.com', role: 'admin', business_number_id: '105046999163958', token: token },
+    { id: 3, name: 'Agent01', username: 'agent01', password: '123456', email: 'agent01@fonlogic.com', role: 'agent', business_number_id: '105046999163958', token: token },
+    { id: 4, name: 'Agent02', username: 'agent02', password: '123456', email: 'agent02@fonlogic.com', role: 'agent', business_number_id: '105046999163958', token: token }
 ];
 
 const fakeBackend = () => {

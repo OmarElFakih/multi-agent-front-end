@@ -76,7 +76,8 @@ function Profile(props) {
           </div>
 
           <h5 className="font-size-16 mb-1 text-truncate">
-            {t("Patricia Smith")}
+            {/* {t("Patricia Smith")} */}
+            {props.user.username}
           </h5>
           <p className="text-muted text-truncate mb-1">
             <i className="ri-record-circle-fill font-size-10 text-success me-1 d-inline-block"></i>{" "}
@@ -106,12 +107,12 @@ function Profile(props) {
               >
                 <div>
                   <p className="text-muted mb-1">{t("Name")}</p>
-                  <h5 className="font-size-14">{t("Patricia Smith")}</h5>
+                  <h5 className="font-size-14">{props.user.username}</h5>
                 </div>
 
                 <div className="mt-4">
                   <p className="text-muted mb-1">{t("Email")}</p>
-                  <h5 className="font-size-14">{t("adc@123.com")}</h5>
+                  <h5 className="font-size-14">{props.user.email}</h5>
                 </div>
 
                 <div className="mt-4">

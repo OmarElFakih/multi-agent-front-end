@@ -42,7 +42,7 @@ function UserChat(props) {
         //console.log(props.recentChatList);
         if(props.recentChatList.length !== 0){
             setchatMessages(props.recentChatList[props.active_user].messages);
-            console.log(props.recentChatList[props.active_user]);
+
         } else{
             setchatMessages([]);
         }
@@ -77,7 +77,7 @@ function UserChat(props) {
                     type: "message",
                     message: message,
                     client_number: props.recentChatList[props.active_user].client_number,
-                    timestamp: Math.floor(Date.now() / 1000)
+                    timestamp: (Math.floor(Date.now() / 1000)).toString()
                 }
                 props.wsClient.send(JSON.stringify(data))
                 break;
@@ -155,18 +155,19 @@ function UserChat(props) {
             let d = new Date();
             let n = d.getSeconds();
             
-            
+            let type = message_data.sender_is_business ? "sender" : "receiver"; 
+
             let mesObj = {
                 id: 0,
                 message: message_data.message,
                 time: "00:" + n,
-                userType: "receiver",
+                userType: type,
                 isImageMessage: false,
                 isFileMessage: false
             }
     
             if (found != null){
-              
+
                 mesObj.id = found.messages.length + 1;
                 found.messages = [...found.messages, mesObj];
                 found.unRead += 1;

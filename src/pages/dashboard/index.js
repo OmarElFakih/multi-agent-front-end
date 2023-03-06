@@ -11,15 +11,23 @@ import { addLoggedinUser } from '../../redux/actions';
 
 import { w3cwebsocket as W3CWebsSocket} from 'websocket';
 
-//use wss for production, ws for local testing
-const wsClient = new W3CWebsSocket("ws:localhost:8000/ws");
+
+let user = JSON.parse(localStorage.getItem("authUser"));
+
+
+//http -> ws, https -> wss
+const wsClient = new W3CWebsSocket("wss:43ee-190-103-63-31.ngrok.io/ws");
 
 
 wsClient.onopen = function() {
     console.log("connected");
     let data = {
+
         type: "connection",
-        business_number_id: "105046999163958"        
+        id: user.name,
+        role: user.role,
+        business_number_id: user.business_number_id,
+    
     }
     wsClient.send(JSON.stringify(data));
 }
@@ -27,8 +35,6 @@ wsClient.onopen = function() {
 wsClient.onerror = function() {
     console.log('Connection Error');
 };
-
-
 
 
 class Index extends Component {
@@ -41,10 +47,10 @@ class Index extends Component {
         return (
             <React.Fragment>
                 {/* chat left sidebar */}
-                <ChatLeftSidebar recentChatList={this.props.users} />
+                <ChatLeftSidebar recentChatList={this.props.users} user={user}/>
 
                 {/* user chat */}
-                <UserChat recentChatList={this.props.users} wsClient={wsClient}/>
+                <UserChat recentChatList={this.props.users} wsClient={wsClient} user={user}/>
 
             </React.Fragment>
         );

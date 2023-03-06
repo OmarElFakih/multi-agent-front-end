@@ -33,7 +33,7 @@ const Login = (props) => {
     // validation
     const formik = useFormik({
         initialValues: {
-            email: 'admin@themesbrand.com',
+            email: 'agent01@fonlogic.com',
             password: '123456'
         },
         validationSchema: Yup.object({
@@ -46,7 +46,10 @@ const Login = (props) => {
     });
 
     if (localStorage.getItem("authUser")) {
+        let user = JSON.parse(localStorage.getItem("authUser"))
+        console.log(user.username);
         return <Redirect to="/" />;
+        
     }
 
     return (
