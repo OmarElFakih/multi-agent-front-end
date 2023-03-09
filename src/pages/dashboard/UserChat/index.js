@@ -149,18 +149,56 @@ function UserChat(props) {
     props.wsClient.onmessage = function(e){
         if (typeof e.data === 'string') {
             let message_data = JSON.parse(e.data);
+            // let message_type = message_data.type;
+            // let payload = message_data.payload;
+            let mesObj;
+            let d = new Date();
+            let n = d.getSeconds();
+            let update_array;
 
     
             let found = props.recentChatList.find(user => user.client_number === message_data.client_number);
             
-            let d = new Date();
-            let n = d.getSeconds();
+            
             
             let type = message_data.sender_is_business ? "sender" : "receiver"; 
 
-            let mesObj;
+            
+            // switch(message_type){
+            //     case "notification":
+            //         mesObj = {
+            //             id: 0,
+            //             isNoti: true,
+            //             body: message_data.body
+            //         }
+            //         break;
 
-            if (message_data.isNoti && message_data.isNoti == true){
+            //     case "message":
+            //         mesObj = {
+            //             id: 0,
+            //             message: payload.message,
+            //             time: "00:" + n,
+            //             userType: type,
+            //             isImageMessage: false,
+            //             isFileMessage: false
+            //         }
+            //         break;
+
+            //     case "conversation":
+            //         break;
+                
+                
+            //     default:
+            //         break;
+            // }
+
+
+
+
+
+
+
+            if (message_data.isNoti && message_data.isNoti === true){
                 mesObj = {
                     id: 0,
                     isNoti: message_data.isNoti,
@@ -183,8 +221,8 @@ function UserChat(props) {
                 mesObj.id = found.messages.length + 1;
                 found.messages = [...found.messages, mesObj];
                 found.unRead += 1;
-                let copyallUsers = [...allUsers];
-                props.setFullUser(copyallUsers);
+                update_array = [...allUsers];
+                // props.setFullUser(copyallUsers);
 
                 scrolltoBottom();
                     
@@ -201,7 +239,13 @@ function UserChat(props) {
                 }
                 
                 props.addLoggedinUser(new_user);
+
+                update_array = [...allUsers, new_user];
+                // props.setFullUser(copyallUsers);
             }
+
+        
+            props.setFullUser(update_array);
         }
     }
 
