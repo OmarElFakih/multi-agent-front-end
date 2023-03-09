@@ -77,7 +77,7 @@ function UserChat(props) {
                     type: "message",
                     message: message,
                     client_number: props.recentChatList[props.active_user].client_number,
-                    timestamp: (Math.floor(Date.now() / 1000)).toString()
+                    timestamp: Date.now().toString()
                 }
                 props.wsClient.send(JSON.stringify(data))
                 break;
@@ -149,6 +149,7 @@ function UserChat(props) {
     props.wsClient.onmessage = function(e){
         if (typeof e.data === 'string') {
             let message_data = JSON.parse(e.data);
+
     
             let found = props.recentChatList.find(user => user.client_number === message_data.client_number);
             
@@ -157,13 +158,24 @@ function UserChat(props) {
             
             let type = message_data.sender_is_business ? "sender" : "receiver"; 
 
-            let mesObj = {
-                id: 0,
-                message: message_data.message,
-                time: "00:" + n,
-                userType: type,
-                isImageMessage: false,
-                isFileMessage: false
+            let mesObj;
+
+            if (message_data.isNoti && message_data.isNoti == true){
+                mesObj = {
+                    id: 0,
+                    isNoti: message_data.isNoti,
+                    body: message_data.body
+                }
+
+            }else{
+                mesObj = {
+                    id: 0,
+                    message: message_data.message,
+                    time: "00:" + n,
+                    userType: type,
+                    isImageMessage: false,
+                    isFileMessage: false
+                }
             }
     
             if (found != null){
@@ -202,7 +214,7 @@ function UserChat(props) {
                     <div className={props.userSidebar ? "w-70" : "w-100"}>
 
                         {/* render user head */}
-                        <UserHead />
+                        <UserHead chatList={props.recentChatList} activeUser={props.active_user} ws_Client={props.wsClient}/>
 
                         <SimpleBar
                             style={{ maxHeight: "100%" }}
@@ -214,9 +226,9 @@ function UserChat(props) {
 
                                 {
                                     chatMessages.map((chat, key) =>
-                                        chat.isToday && chat.isToday === true ? <li key={"dayTitle" + key}>
+                                        chat.isNoti && chat.isNoti === true ? <li key={"dayTitle" + key}>
                                             <div className="chat-day-title">
-                                                <span className="title">Today</span>
+                                                <span className="title">{chat.body}</span>
                                             </div>
                                         </li> :
                                             (props.recentChatList[props.active_user].isGroup === true) ?

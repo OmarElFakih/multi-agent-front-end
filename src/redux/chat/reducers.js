@@ -24,7 +24,7 @@ const INIT_STATE = {
         //         { id: 2, message: "hi patrick", time: "10.00", userType: "sender", isImageMessage : false, isFileMessage : false },
         //         { id: 3, message: "how's going on your project?", time: "01:05", userType: "receiver", isImageMessage : false, isFileMessage : false },
         //         { id: 4, message: "Do you need any help?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
-        //         { id : 33, isToday : true },
+        //         { id : 33, isNoti : true , body: "Today"},
         //         { id: 5, message: "Let me know?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
         //         { id: 6, message: "hi...Good Morning!", time: "09:05", userType: "sender", isImageMessage : false, isFileMessage : false },
         //         { id: 7, message: "image", time: "10:30", userType: "receiver", isImageMessage : true, isFileMessage : false, imageMessage : [ { image : img4 }, { image : img7 } ] },

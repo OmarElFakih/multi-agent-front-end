@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Button, Input, Row, Col, Modal, ModalBody } from "reactstrap";
+import React, { useEffect, useState } from 'react';
+import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, /*Button,*/ Input, Row, Col, Modal, ModalBody } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faX, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 import { openUserSidebar, setFullUser } from "../../../redux/actions";
 
@@ -11,12 +14,14 @@ import user from '../../../assets/images/users/avatar-4.jpg'
 function UserHead(props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownOpen1, setDropdownOpen1] = useState(false);
-    const [Callmodal, setCallModal] = useState(false);
+    const [EndModal, setEndModal] = useState(false);
     const [Videomodal, setVideoModal] = useState(false);
+    const [allUsers, setAllUsers] = useState(props.chatList);
+    
 
     const toggle = () => setDropdownOpen(!dropdownOpen);
     const toggle1 = () => setDropdownOpen1(!dropdownOpen1);
-    const toggleCallModal = () => setCallModal(!Callmodal);
+    const toggleEndModal = () => setEndModal(!EndModal);
     const toggleVideoModal = () => setVideoModal(!Videomodal);
 
     const openUserSidebar = (e) => {
@@ -32,13 +37,49 @@ function UserHead(props) {
         }
     }
 
-    function deleteMessage() {
-        let allUsers = props.users;
-        let copyallUsers = allUsers;
-        copyallUsers[props.active_user].messages = [];
+    // function deleteMessage() {
+    //     let allUsers = props.users;
+    //     let copyallUsers = allUsers;
+    //     copyallUsers[props.active_user].messages = [];
 
-        props.setFullUser(copyallUsers);
+       
+    //     props.setFullUser(copyallUsers);
+
+        
+    //     console.log(allUsers[props.active_user]);
+    // }
+
+
+    function terminateConversation(){
+
+        let copyAllUsers = [...allUsers];
+
+        let noti_data = {
+            type: "notification",
+            noti_type: "termination",
+            body: "conversation terminated",
+            client_number: copyAllUsers[props.activeUser].client_number,
+            timestamp: Date.now().toString(),
+        }
+
+        props.ws_Client.send(JSON.stringify(noti_data));
+
+        
+        copyAllUsers[props.activeUser].status = "offline";
+        props.setFullUser(copyAllUsers);
+
+        toggleEndModal();
+        
+        
     }
+
+
+    useEffect(() => {
+        setAllUsers(props.chatList);
+    }, [props.chatList])
+
+
+
 
     return (
         <React.Fragment>
@@ -117,7 +158,7 @@ function UserHead(props) {
                                 </Dropdown>
                             </li>
                             <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
-                                <button type="button" onClick={toggleCallModal} className="btn nav-btn" >
+                                <button type="button" onClick={toggleEndModal} className="btn nav-btn" >
                                     <i className="ri-phone-line"></i>
                                 </button>
                             </li>
@@ -127,11 +168,11 @@ function UserHead(props) {
                                 </button>
                             </li>
 
-                            <li className="list-inline-item d-none d-lg-inline-block">
+                            {/* <li className="list-inline-item d-none d-lg-inline-block">
                                 <Button type="button" color="none" onClick={(e) => openUserSidebar(e)} className="nav-btn user-profile-show">
                                     <i className="ri-user-2-line"></i>
                                 </Button>
-                            </li>
+                            </li> */}
 
                             <li className="list-inline-item">
                                 <Dropdown isOpen={dropdownOpen1} toggle={toggle1}>
@@ -139,10 +180,10 @@ function UserHead(props) {
                                         <i className="ri-more-fill"></i>
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-menu-end">
-                                        <DropdownItem className="d-block d-lg-none user-profile-show" onClick={(e) => openUserSidebar(e)}>View profile <i className="ri-user-2-line float-end text-muted"></i></DropdownItem>
-                                        <DropdownItem>Archive <i className="ri-archive-line float-end text-muted"></i></DropdownItem>
-                                        <DropdownItem>Muted <i className="ri-volume-mute-line float-end text-muted"></i></DropdownItem>
-                                        <DropdownItem onClick={(e) => deleteMessage(e)}>Delete <i className="ri-delete-bin-line float-end text-muted"></i></DropdownItem>
+                                        {/* <DropdownItem className="d-block d-lg-none user-profile-show" onClick={(e) => openUserSidebar(e)}>View profile <i className="ri-user-2-line float-end text-muted"></i></DropdownItem> */}
+                                        <DropdownItem>Refer conversation {/*<i className="ri-archive-line float-end text-muted"></i>*/}</DropdownItem>
+                                        <DropdownItem>Change tag {/*<i className="ri-volume-mute-line float-end text-muted"></i>*/}</DropdownItem>
+                                        <DropdownItem onClick={toggleEndModal}>End conversation {/*<i className="ri-delete-bin-line float-end text-muted"></i>*/}</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
                             </li>
@@ -152,30 +193,32 @@ function UserHead(props) {
                 </Row>
             </div>
 
-            {/* Start Audiocall Modal */}
-            <Modal tabIndex="-1" isOpen={Callmodal} toggle={toggleCallModal} centered>
+            {/* End Conversation Modal */}
+            <Modal tabIndex="-1" isOpen={EndModal} toggle={toggleEndModal} centered>
                 <ModalBody>
                     <div className="text-center p-4">
-                        <div className="avatar-lg mx-auto mb-4">
+                        {/* <div className="avatar-lg mx-auto mb-4">
                             <img src={user} alt="" className="img-thumbnail rounded-circle" />
-                        </div>
+                        </div> */}
 
-                        <h5 className="text-truncate">Doris Brown</h5>
-                        <p className="text-muted">Start Audio Call</p>
+                        <h5 className="text-truncate">End Conversation?</h5>
+                        <p className="text-muted">the conversation will end and you will no longer be able to send messages to this client</p>
 
                         <div className="mt-5">
                             <ul className="list-inline mb-1">
                                 <li className="list-inline-item px-2 me-2 ms-0">
-                                    <button type="button" className="btn btn-danger avatar-sm rounded-circle" onClick={toggleCallModal}>
-                                        <span className="avatar-title bg-transparent font-size-20">
-                                            <i className="ri-close-fill"></i>
+                                    <button type="button" className="btn btn-danger avatar-sm rounded-circle" onClick={toggleEndModal}>
+                                        <span className="avatar-title bg-transparent font-size-20" >
+                                            {/* <i className="ri-close-fill"></i> */}
+                                            <FontAwesomeIcon icon={faX} />
                                         </span>
                                     </button>
                                 </li>
                                 <li className="list-inline-item px-2">
-                                    <button type="button" className="btn btn-success avatar-sm rounded-circle">
+                                    <button onClick={(e) => terminateConversation(e)} type="button" className="btn btn-success avatar-sm rounded-circle">
                                         <span className="avatar-title bg-transparent font-size-20">
-                                            <i className="ri-phone-fill"></i>
+                                            {/* <i className="ri-phone-fill"></i> */}
+                                            <FontAwesomeIcon icon={faCheck} />
                                         </span>
                                     </button>
                                 </li>
