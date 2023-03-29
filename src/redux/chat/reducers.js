@@ -27,7 +27,7 @@ const INIT_STATE = {
         //         { id : 33, isNoti : true , body: "Today"},
         //         { id: 5, message: "Let me know?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
         //         { id: 6, message: "hi...Good Morning!", time: "09:05", userType: "sender", isImageMessage : false, isFileMessage : false },
-        //         { id: 7, message: "image", time: "10:30", userType: "receiver", isImageMessage : true, isFileMessage : false, imageMessage : [ { image : img4 }, { image : img7 } ] },
+        //         { id: 7, message: "texto", time: "10:30", userType: "receiver", isImageMessage : true, isFileMessage : false, imageMessage : [  { image : "https://multi-agent-bucket.s3.amazonaws.com/images/237017058792209.jpg" } ] },
         //         { id: 8, message: "please, save this pictures to your file and give it to me after you have done with editing!", time: "10:31", userType: "receiver", isImageMessage : false, isFileMessage : false },
         //         { id: 9, message: "okay sure😄👍", time: "02:50", userType: "sender", isImageMessage : false, isFileMessage : false },
         // ] },

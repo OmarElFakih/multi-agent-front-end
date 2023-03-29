@@ -149,8 +149,6 @@ function UserChat(props) {
     props.wsClient.onmessage = function(e){
         if (typeof e.data === 'string') {
             let message_data = JSON.parse(e.data);
-            // let message_type = message_data.type;
-            // let payload = message_data.payload;
             let mesObj;
             let d = new Date();
             let n = d.getSeconds();
@@ -163,40 +161,6 @@ function UserChat(props) {
             
             let type = message_data.sender_is_business ? "sender" : "receiver"; 
 
-            
-            // switch(message_type){
-            //     case "notification":
-            //         mesObj = {
-            //             id: 0,
-            //             isNoti: true,
-            //             body: message_data.body
-            //         }
-            //         break;
-
-            //     case "message":
-            //         mesObj = {
-            //             id: 0,
-            //             message: payload.message,
-            //             time: "00:" + n,
-            //             userType: type,
-            //             isImageMessage: false,
-            //             isFileMessage: false
-            //         }
-            //         break;
-
-            //     case "conversation":
-            //         break;
-                
-                
-            //     default:
-            //         break;
-            // }
-
-
-
-
-
-
 
             if (message_data.isNoti && message_data.isNoti === true){
                 mesObj = {
@@ -206,14 +170,44 @@ function UserChat(props) {
                 }
 
             }else{
-                mesObj = {
-                    id: 0,
-                    message: message_data.message,
-                    time: "00:" + n,
-                    userType: type,
-                    isImageMessage: false,
-                    isFileMessage: false
+
+                switch(message_data.msg_type){
+                    
+                    case "txt":
+                        mesObj = {
+                            id: 0,
+                            message: message_data.message,
+                            time: "00:" + n,
+                            userType: type,
+                            isImageMessage: false,
+                            isFileMessage: false
+                        }
+                        break;
+
+                    case "img":
+                        console.log("incoming image")
+
+                        var imageMessage = [{image: message_data.image_url}]
+
+                        mesObj = {
+                            id: 0,
+                            message: message_data.caption,
+                            imageMessage: imageMessage,
+                            time: "00:" + n,
+                            userType: type,
+                            isImageMessage: true,
+                            isFileMessage: false
+                        }
+                        break;
+
+                    default:
+                        break;
+
                 }
+            
+
+            
+
             }
     
             if (found != null){
