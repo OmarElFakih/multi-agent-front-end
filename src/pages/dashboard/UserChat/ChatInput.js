@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownToggle, DropdownMenu, Label, Form } from "reactstrap";
 import Picker from 'emoji-picker-react';
 
@@ -10,6 +10,12 @@ function ChatInput(props) {
         size: ""
     });
     const [fileImage, setfileImage] = useState("")
+    const [allUsers, setAllUsers] = useState(props.chatList);
+
+
+    useEffect(() => {
+        setAllUsers(props.chatList);
+    }, [props.chatList])
 
     const toggle = () => setisOpen(!isOpen);
 
@@ -40,26 +46,35 @@ function ChatInput(props) {
     //function for send data to onaddMessage function(in userChat/index.js component)
     const onaddMessage = (e, textMessage) => {
         e.preventDefault();
-        //if text value is not emptry then call onaddMessage function
-        if (textMessage !== "") {
-            props.onaddMessage(textMessage, "textMessage");
-            settextMessage("");
-        }
 
-        //if file input value is not empty then call onaddMessage function
-        if (file.name !== "") {
-            props.onaddMessage(file, "fileMessage");
-            setfile({
-                name: "",
-                size: ""
-            })
-        }
+        let copyAllUsers = [...allUsers]
+        
+        console.log("empty array: " + [])
+        console.log("length is " + copyAllUsers.length)
+        if(copyAllUsers.length > 0 && copyAllUsers[props.activeUser].status === "online"){
+            //if text value is not emptry then call onaddMessage function
+            if (textMessage !== "") {
+                props.onaddMessage(textMessage, "textMessage");
+                settextMessage("");
+            }
 
-        //if image input value is not empty then call onaddMessage function
-        if (fileImage !== "") {
-            props.onaddMessage(fileImage, "imageMessage");
-            setfileImage("")
+            //if file input value is not empty then call onaddMessage function
+            if (file.name !== "") {
+                props.onaddMessage(file, "fileMessage");
+                setfile({
+                    name: "",
+                    size: ""
+                })
+            }
+
+            //if image input value is not empty then call onaddMessage function
+            if (fileImage !== "") {
+                props.onaddMessage(fileImage, "imageMessage");
+                setfileImage("")
+            }
+
         }
+        
     }
 
     return (

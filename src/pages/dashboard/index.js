@@ -16,7 +16,7 @@ let user = JSON.parse(localStorage.getItem("authUser"));
 
 
 //http -> ws, https -> wss
-const wsClient = new W3CWebsSocket("wss:c23a-190-103-63-31.ngrok.io/ws");
+const wsClient = new W3CWebsSocket("wss:96b1-190-103-63-31.ngrok.io/ws");
 
 
 wsClient.onopen = function() {
@@ -29,8 +29,12 @@ wsClient.onopen = function() {
         business_number_id: user.business_number_id,
     
     }
-    wsClient.send(JSON.stringify(data));
+    setTimeout(() => {wsClient.send(JSON.stringify(data));}, 1000)
+
+    //wsClient.send(JSON.stringify(data));
 }
+
+
 
 wsClient.onerror = function() {
     console.log('Connection Error');

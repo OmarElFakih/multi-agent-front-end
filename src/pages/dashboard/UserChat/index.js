@@ -163,6 +163,7 @@ function UserChat(props) {
 
 
             if (message_data.isNoti && message_data.isNoti === true){
+                console.log("notification")
                 mesObj = {
                     id: 0,
                     isNoti: message_data.isNoti,
@@ -174,6 +175,7 @@ function UserChat(props) {
                 switch(message_data.msg_type){
                     
                     case "txt":
+                        console.log("txt")
                         mesObj = {
                             id: 0,
                             message: message_data.message,
@@ -185,9 +187,9 @@ function UserChat(props) {
                         break;
 
                     case "img":
-                        console.log("incoming image")
+                        console.log("image")
 
-                        var imageMessage = [{image: message_data.image_url}]
+                        let imageMessage = [{image: message_data.image_url}]
 
                         mesObj = {
                             id: 0,
@@ -216,9 +218,10 @@ function UserChat(props) {
                 found.messages = [...found.messages, mesObj];
                 found.unRead += 1;
                 update_array = [...allUsers];
-                // props.setFullUser(copyallUsers);
-
+                //props.setFullUser(update_array);
+                
                 scrolltoBottom();
+                console.log("user found")
                     
             }else{
                 let new_user = {
@@ -233,9 +236,11 @@ function UserChat(props) {
                 }
                 
                 props.addLoggedinUser(new_user);
-
+                
                 update_array = [...allUsers, new_user];
-                // props.setFullUser(copyallUsers);
+
+                console.log("user added")
+                //props.setFullUser(update_array);
             }
 
         
@@ -468,7 +473,7 @@ function UserChat(props) {
                             </ModalBody>
                         </Modal>
 
-                        <ChatInput onaddMessage={addMessage} />
+                        <ChatInput onaddMessage={addMessage} chatList={props.recentChatList} activeUser={props.active_user}/>
                     </div>
 
                     <UserProfileSidebar activeUser={props.recentChatList[props.active_user]} />
