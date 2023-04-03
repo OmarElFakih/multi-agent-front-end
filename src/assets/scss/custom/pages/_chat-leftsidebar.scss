@@ -7,10 +7,10 @@
     height: 100vh;
     background-color: $sidebar-sub-bg;
 
-    @media (min-width: 992px) {
-        min-width: 380px;
-        max-width: 380px;
-    }
+    // @media (min-width: 992px) {
+    //     min-width: 380px;
+    //     max-width: 380px;
+    // }
 
     .user-status-box {
         background-color: var(--#{$variable-prefix}light);
@@ -26,6 +26,19 @@
             left: 0;
             right: 0;
         }
+    }
+}
+
+.sidebar-standard-width{
+    @media (min-width: 992px) {
+        min-width: 380px;
+        max-width: 380px;
+    }
+}
+
+.sidebar-max-width{
+    @media (min-width: 992px) {
+        min-width: 100vw;
     }
 }
 

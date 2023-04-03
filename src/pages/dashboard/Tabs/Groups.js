@@ -238,4 +238,4 @@ const mapStateToProps = (state) => {
     return { groups, active_user };
 };
 
-export default (connect(mapStateToProps, { createGroup })(withTranslation()(Groups)));
+export default (connect(mapStateToProps, { createGroup })(withTranslation()(Metrics)));

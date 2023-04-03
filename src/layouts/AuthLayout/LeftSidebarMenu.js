@@ -20,6 +20,9 @@ import germany from "../../assets/images/flags/germany.jpg";
 import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChartSimple } from '@fortawesome/free-solid-svg-icons'
+
 function LeftSidebarMenu(props) {
     const dispatch = useDispatch();
     const { layoutMode } = useSelector(state => ({
@@ -71,6 +74,8 @@ function LeftSidebarMenu(props) {
             setlng("English");
     }
 
+    let user = JSON.parse(localStorage.getItem("authUser"));
+
     return (
         <React.Fragment>
             <div className="side-menu flex-lg-column me-lg-1">
@@ -109,14 +114,14 @@ function LeftSidebarMenu(props) {
                         <UncontrolledTooltip target="Chats" placement="top">
                             Chats
                         </UncontrolledTooltip>
-                        <NavItem id="Groups">
+                        {/* <NavItem id="Groups">
                             <NavLink id="pills-groups-tab" className={classnames({ active: activeTab === 'group' })} onClick={() => { toggleTab('group'); }}>
                                 <i className="ri-group-line"></i>
                             </NavLink>
                         </NavItem>
                         <UncontrolledTooltip target="Groups" placement="top">
                             Groups
-                        </UncontrolledTooltip>
+                        </UncontrolledTooltip> */}
                         <NavItem id="Contacts">
                             <NavLink id="pills-contacts-tab" className={classnames({ active: activeTab === 'contacts' })} onClick={() => { toggleTab('contacts'); }}>
                                 <i className="ri-contacts-line"></i>
@@ -125,6 +130,19 @@ function LeftSidebarMenu(props) {
                         <UncontrolledTooltip target="Contacts" placement="top">
                             Contacts
                         </UncontrolledTooltip>
+                        
+                        <div style={{display : user.role === "admin" ? "block" : "none"}}>
+                        <NavItem id="Metrics">
+                            <NavLink id="pills-metrics-tab" className={classnames({ active: activeTab === 'metrics' })} onClick={() => { toggleTab('metrics'); }}>
+                                {/* <i className="ri-group-line"></i> */}
+                                <FontAwesomeIcon icon={faChartSimple} />
+                            </NavLink>
+                        </NavItem>
+                        <UncontrolledTooltip target="Metrics" placement="top">
+                            Metrics
+                        </UncontrolledTooltip>
+                        </div>
+                        
                         <NavItem id="Settings">
                             <NavLink id="pills-setting-tab" className={classnames({ active: activeTab === 'settings' })} onClick={() => { toggleTab('settings'); }}>
                                 <i className="ri-settings-2-line"></i>

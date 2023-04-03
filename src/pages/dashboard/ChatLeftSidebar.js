@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 
 import { TabContent, TabPane } from "reactstrap";
@@ -6,7 +6,7 @@ import { TabContent, TabPane } from "reactstrap";
 //Import Components
 import Profile from "./Tabs/Profile";
 import Chats from "./Tabs/Chats";
-import Groups from "./Tabs/Groups";
+import Metrics from "./Tabs/Metrics";
 import Contacts from "./Tabs/Contacts";
 import Settings from "./Tabs/Settings";
 
@@ -14,11 +14,19 @@ function ChatLeftSidebar(props) {
 
     const activeTab = props.activeTab;
 
+    const [widthClass, setWidthClass] = useState("sidebar-standard-width") 
+    
+    useEffect(() => {
+        let newWithClass = activeTab === "metrics" ? "sidebar-max-width" : "sidebar-standard-width";
+
+        setWidthClass(newWithClass)
+
+    }, [activeTab])
     
 
     return (
         <React.Fragment>
-            <div className="chat-leftsidebar me-lg-1">
+            <div className={"chat-leftsidebar me-lg-1 " + widthClass}>
 
                 <TabContent activeTab={activeTab}>
                     {/* Start Profile tab-pane */}
@@ -36,9 +44,9 @@ function ChatLeftSidebar(props) {
                     {/* End chats tab-pane */}
 
                     {/* Start groups tab-pane */}
-                    <TabPane tabId="group" id="pills-groups">
-                        {/* Groups content */}
-                        <Groups />
+                    <TabPane tabId="metrics" id="pills-metrics">
+                        {/* Metrics content */}
+                        <Metrics />
                     </TabPane>
                     {/* End groups tab-pane */}
 
@@ -48,6 +56,7 @@ function ChatLeftSidebar(props) {
                         <Contacts />
                     </TabPane>
                     {/* End contacts tab-pane */}
+
 
                     {/* Start settings tab-pane */}
                     <TabPane tabId="settings" id="pills-setting">
