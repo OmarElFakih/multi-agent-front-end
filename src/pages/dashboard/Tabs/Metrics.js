@@ -3,53 +3,75 @@ import { connect } from "react-redux";
 
 import { withTranslation } from 'react-i18next';
 
+import BarChart from '../../../ChartComponents/BarChart';
 
-//actions
-import { createGroup } from "../../../redux/actions";
+import { CreatedConversations } from '../../../ChartData'
+
+import { Button } from 'reactstrap';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
+
 
 class Metrics extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isOpenCollapse: false,
+            dataCopy: CreatedConversations
         }
-        // this.toggleCollapse = this.toggleCollapse.bind(this);
+        
     }
 
-    
-
-    // toggleCollapse() {
-    //     this.setState({ isOpenCollapse: !this.state.isOpenCollapse });
-    // }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
+    updateDataCopy(daysToShow){
+        console.log("button clicked")
+        if(daysToShow < 0){
             this.setState({
-                groups: this.props.groups
+                dataCopy: CreatedConversations
+            });
+        }
+        else{
+            let auxArr = [];
+            for (let i = 0; i < daysToShow; i++){
+                auxArr.push(CreatedConversations[i])
+            }
+
+            this.setState({
+                dataCopy: auxArr
             });
         }
     }
+
 
    
     
     render() {
         const { t } = this.props;
+
+        const Cdata = {
+            labels: this.state.dataCopy.map((data) => data.id),
+            datasets: [{
+                label: "Conversations created",
+                data: this.state.dataCopy.map((data => data.conversations)),
+                backgroundColor: "#7269ef"
+            }],
+            
+        }
+
         return (
             <React.Fragment>
                 <div style={{width: "100%"}}>
-                    <div className="p-4">
-                        
-                        
-                        <h4 className="mb-4">{t('Metrics')}</h4>
+                    <div className="p-4" style={{display: "flex", justifyContent: "space-between"}}>
+                        <h4 className="mb-4">{t('Metrics')}</h4>  
+                        <Button type="input" color="primary" onClick={() => this.updateDataCopy(2)} className="font-size-16 btn-lg chat-send waves-effect waves-light">
+                            <FontAwesomeIcon icon={faArrowsRotate}/>
+                        </Button>
 
-                        
-                        
-
-                        
-                       
                     </div>
+                    <div style={{width: "47vw", display: "flex"}}>
+                        <BarChart chartData={Cdata}/>
 
-                    
+                    </div>
                 </div>
             </React.Fragment>
         );
@@ -61,4 +83,4 @@ const mapStateToProps = (state) => {
     return { groups, active_user };
 };
 
-export default (connect(mapStateToProps, { createGroup })(withTranslation()(Metrics)));
+export default (connect(mapStateToProps)(withTranslation()(Metrics)));
