@@ -170,6 +170,15 @@ function UserChat(props) {
                     body: message_data.body
                 }
 
+                if (message_data.type === "termination"){
+                    found.status = "offline";
+                }
+
+                if (message_data.type === "assignment"){
+                    found.status = "away";
+                    found.assigned_agent = message_data.agent;
+                }
+
             }else{
 
                 switch(message_data.msg_type){
@@ -224,17 +233,21 @@ function UserChat(props) {
                 console.log("user found")
                     
             }else{
+                let user_status = message_data.assigned_agent === "none" ? "online" : "away";
+
                 let new_user = {
                     id: props.recentChatList.length,
                     name: message_data.client_profile_name,
                     profilePicture: "Null",
-                    status: "online",
+                    status: user_status,
                     unRead: 1,
                     isGroup: false,
                     client_number: message_data.client_number,
+                    assigned_agent: message_data.assigned_agent,
                     messages: [mesObj]
                 }
-                
+                console.log(message_data.assigned_agent)
+
                 props.addLoggedinUser(new_user);
                 
                 update_array = [...allUsers, new_user];

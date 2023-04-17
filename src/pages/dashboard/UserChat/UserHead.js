@@ -65,7 +65,7 @@ function UserHead(props) {
         props.ws_Client.send(JSON.stringify(noti_data));
 
         
-        copyAllUsers[props.activeUser].status = "offline";
+        // copyAllUsers[props.activeUser].status = "offline";
         props.setFullUser(copyAllUsers);
 
         toggleEndModal();

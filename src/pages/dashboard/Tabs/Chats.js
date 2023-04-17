@@ -172,6 +172,7 @@ class Chats extends Component {
 
                                                     <div className="flex-grow-1 overflow-hidden">
                                                         <h5 className="text-truncate font-size-15 mb-1">{chat.name}</h5>
+                                                        <p>Assigned to {chat.assigned_agent}</p>
                                                         <p className="chat-user-message text-truncate mb-0">
                                                             {
                                                                 chat.isTyping ?

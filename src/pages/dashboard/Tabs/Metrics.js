@@ -20,9 +20,11 @@ class Metrics extends Component {
         super(props);
         this.state = {
             isOpenCollapse: false,
-            dataCopy: CreatedConversations,
-            performanceCopy: AgentPerformance,
-            Pdata: {}
+            beData: {},
+            convDataCopy: CreatedConversations,
+            perfDataCopy: AgentPerformance,
+            Pdata: {},
+            options: []
         }
         
     }
@@ -31,8 +33,8 @@ class Metrics extends Component {
         
         if(daysToShow < 0){
             this.setState({
-                dataCopy: CreatedConversations,
-                performanceCopy: AgentPerformance
+                convDataCopy: CreatedConversations,
+                perfDataCopy: AgentPerformance
             });
         }
         else{
@@ -45,8 +47,8 @@ class Metrics extends Component {
             }
 
             this.setState({
-                dataCopy: auxArr,
-                performanceCopy: auxArr2,
+                convDataCopy: auxArr,
+                perfDataCopy: auxArr2,
                 Pdata: this.sumOfCalls(auxArr2)
             });
         }
@@ -54,25 +56,28 @@ class Metrics extends Component {
 
 
     sumOfCalls(performanceData){
-        // console.log(this.state.performanceCopy)
         let totalSum = {}
-        // console.log(this.state.performanceCopy[0].agents)
+        
+        // performanceData[0].agents.map(agent => totalSum[Object.keys(agent)[0]] = 0)
 
-        performanceData[0].agents.map(agent => totalSum[Object.keys(agent)[0]] = 0)
+        Object.keys(performanceData[0].agents).forEach(function(key, index){totalSum[key] = 0})
+
+        // performanceData.forEach(day => {
+        //     day["agents"].map(agent => totalSum[Object.keys(agent)[0]] += agent[Object.keys(agent)[0]])
+        // });
 
         performanceData.forEach(day => {
-            day["agents"].map(agent => totalSum[Object.keys(agent)[0]] += agent[Object.keys(agent)[0]])
-        });
-
-        // console.log(totalSum)
+            Object.keys(day.agents).forEach(function(key, index){totalSum[key] += day.agents[key]})
+        })
 
         return totalSum
     }
 
     componentDidMount(){
         console.log("mounted")
+
         this.setState({
-            Pdata: this.sumOfCalls(this.state.performanceCopy)
+            Pdata: this.sumOfCalls(this.state.perfDataCopy)
         })
 
        
@@ -88,10 +93,10 @@ class Metrics extends Component {
         const { t } = this.props;
 
         const Cdata = {
-            labels: this.state.dataCopy.map((data) => data.id),
+            labels: this.state.convDataCopy.map((data) => data.id),
             datasets: [{
                 label: "Conversations created",
-                data: this.state.dataCopy.map((data => data.conversations)),
+                data: this.state.convDataCopy.map((data => data.conversations)),
                 backgroundColor: "#7269ef"
             }],
             
