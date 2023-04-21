@@ -55,7 +55,7 @@ function UserHead(props) {
         let copyAllUsers = [...allUsers];
 
         let noti_data = {
-            type: "notification",
+            msg_type: "notification",
             noti_type: "termination",
             body: "conversation terminated",
             client_number: copyAllUsers[props.activeUser].client_number,

@@ -74,10 +74,17 @@ function UserChat(props) {
                     isImageMessage: false
                 }
                 let data = {
-                    type: "message",
-                    message: message,
+                    msg_type: "msg",
+                    business_phone_number: props.user.business_phone_number,
+                    business_number_id: props.user.business_number_id,
                     client_number: props.recentChatList[props.active_user].client_number,
-                    timestamp: Date.now().toString()
+                    client_profile_name: props.recentChatList[props.active_user].name,
+                    assigned_agent: "",
+                    timestamp: Date.now().toString(),
+                    sender_is_business: true,
+                    message: message,
+                    
+                    
                 }
                 props.wsClient.send(JSON.stringify(data))
                 break;
@@ -154,8 +161,8 @@ function UserChat(props) {
             let n = d.getSeconds();
             let update_array;
 
-    
-            let found = props.recentChatList.find(user => user.client_number === message_data.client_number);
+            //an existing conversation matching the sender's number
+            let found = props.recentChatList.find(user => user.client_number === message_data.client_number && user.status !== "offline");
             
             
             
@@ -175,8 +182,11 @@ function UserChat(props) {
                 }
 
                 if (message_data.type === "assignment"){
-                    found.status = "away";
-                    found.assigned_agent = message_data.agent;
+                    found.assigned_agent = message_data.assigned_agent;
+                    
+                    if(message_data.assigned_agent !== props.user.name)
+                        found.status = "away";
+                    
                 }
 
             }else{
@@ -233,7 +243,8 @@ function UserChat(props) {
                 console.log("user found")
                     
             }else{
-                let user_status = message_data.assigned_agent === "none" ? "online" : "away";
+                //console.log("a agent: " + message_data.agent)
+                let user_status = message_data.assigned_agent === props.user.name || message_data.assigned_agent === "none" ? "online" : "away";
 
                 let new_user = {
                     id: props.recentChatList.length,

@@ -16,14 +16,14 @@ let user = JSON.parse(localStorage.getItem("authUser"));
 
 
 //http -> ws, https -> wss
-const wsClient = new W3CWebsSocket("wss:fe7b-190-103-63-31.ngrok.io/ws");
+const wsClient = new W3CWebsSocket("wss:aws1.fonlogic.com/ws");
 
 
 wsClient.onopen = function() {
     console.log("connected");
     let data = {
 
-        type: "connection",
+        msg_type: "connection",
         id: user.name,
         role: user.role,
         business_number_id: user.business_number_id,
