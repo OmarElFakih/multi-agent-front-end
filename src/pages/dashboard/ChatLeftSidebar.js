@@ -7,6 +7,7 @@ import { TabContent, TabPane } from "reactstrap";
 import Profile from "./Tabs/Profile";
 import Chats from "./Tabs/Chats";
 import Metrics from "./Tabs/Metrics";
+import History from './Tabs/History';
 import Contacts from "./Tabs/Contacts";
 import Settings from "./Tabs/Settings";
 
@@ -17,7 +18,7 @@ function ChatLeftSidebar(props) {
     const [widthClass, setWidthClass] = useState("sidebar-standard-width") 
     
     useEffect(() => {
-        let newWithClass = activeTab === "metrics" ? "sidebar-max-width" : "sidebar-standard-width";
+        let newWithClass = activeTab === "metrics" || activeTab === "history" ? "sidebar-max-width" : "sidebar-standard-width";
 
         setWidthClass(newWithClass)
 
@@ -43,12 +44,19 @@ function ChatLeftSidebar(props) {
                     </TabPane>
                     {/* End chats tab-pane */}
 
-                    {/* Start groups tab-pane */}
+                    {/* Start metrics tab-pane */}
                     <TabPane tabId="metrics" id="pills-metrics">
                         {/* Metrics content */}
                         <Metrics />
                     </TabPane>
-                    {/* End groups tab-pane */}
+                    {/* End metrics tab-pane */}
+
+                    {/* Start history tab-pane */}
+                    <TabPane tabId="history" id="pills-history">
+                        {/* History content */}
+                        <History />
+                    </TabPane>
+                    {/* End history tab-pane */}
 
                     {/* Start contacts tab-pane */}
                     <TabPane tabId="contacts" id="pills-contacts">

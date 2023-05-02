@@ -21,7 +21,7 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartSimple } from '@fortawesome/free-solid-svg-icons'
+import { faChartSimple, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons'
 
 function LeftSidebarMenu(props) {
     const dispatch = useDispatch();
@@ -141,6 +141,16 @@ function LeftSidebarMenu(props) {
                         <UncontrolledTooltip target="Metrics" placement="top">
                             Metrics
                         </UncontrolledTooltip>
+                        <NavItem id="History">
+                            <NavLink id="pills-History-tab" className={classnames({ active: activeTab === 'history' })} onClick={() => { toggleTab('history'); }}>
+                                {/* <i className="ri-group-line"></i> */}
+                                <FontAwesomeIcon icon={faClockRotateLeft} />
+                            </NavLink>
+                        </NavItem>
+                        <UncontrolledTooltip target="History" placement="top">
+                            History
+                        </UncontrolledTooltip>
+
                         </div>
                         
                         <NavItem id="Settings">
