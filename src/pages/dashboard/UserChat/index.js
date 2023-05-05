@@ -82,7 +82,7 @@ function UserChat(props) {
                     assigned_agent: "",
                     timestamp: Date.now().toString(),
                     sender_is_business: true,
-                    message: message,
+                    body: message,
                     
                     
                 }
@@ -197,7 +197,7 @@ function UserChat(props) {
                         console.log("txt")
                         mesObj = {
                             id: 0,
-                            message: message_data.message,
+                            message: message_data.body,
                             time: "00:" + n,
                             userType: type,
                             isImageMessage: false,

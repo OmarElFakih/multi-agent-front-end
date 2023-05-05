@@ -11,12 +11,14 @@ import { addLoggedinUser } from '../../redux/actions';
 
 import { w3cwebsocket as W3CWebsSocket} from 'websocket';
 
+import { ServerLink } from './Tabs/ServerLink';
+
 
 let user = JSON.parse(localStorage.getItem("authUser"));
 
 
 //http -> ws, https -> wss
-const wsClient = new W3CWebsSocket("wss:aws1.fonlogic.com/ws");
+const wsClient = new W3CWebsSocket("wss:"+ServerLink+"/ws");
 
 
 wsClient.onopen = function() {

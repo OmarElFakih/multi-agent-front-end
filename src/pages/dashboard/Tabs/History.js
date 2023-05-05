@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+// import axios from 'axios';
 
 import { withTranslation } from 'react-i18next';
 
 import Select from 'react-select'
 
-import MultiAgentDatePicker from '../../../DatePicker/MultiAgentDatePicker';
+import MultiAgentDatePicker from '../../../DateUtils/MultiAgentDatePicker';
+import { createDateString} from '../../../DateUtils/dateMethods';
+
 
 import {Input, Button} from "reactstrap"
 
@@ -20,7 +23,7 @@ import { ServerLink } from './ServerLink';
 class History extends Component {
     constructor(props) {
         super(props);
-        this.serverLink = ServerLink + "/history"
+        this.serverLink = "https://"+ ServerLink + "/history"
         this.user = JSON.parse(localStorage.getItem("authUser"));
         
         this.state = {
@@ -40,28 +43,116 @@ class History extends Component {
         
     }
 
+
+    addaptData(data) {
+        let addapted = []
+        
+        for (const conversation of data){
+            console.log(conversation)
+            let timestamp = parseInt(conversation["date"]);
+            let convDate = new Date(timestamp * 1000)
+
+
+            let messageList = [{
+                id: 0,
+                isNoti: true,
+                body: "this conversation took place on " + createDateString(convDate)
+            }]
+
+
+            for (const message of conversation["messages"]){
+                let type = message["sender_is_business"] ? "sender" : "receiver";
+                let msgObj = {};
+
+                switch(message["msg_type"]){
+                    case "txt":
+                        msgObj = {
+                            id: messageList.length,
+                            message: message["body"],
+                            time: "-",
+                            userType: type,
+                            isImageMessage: false,
+                            isFileMessage: false
+                        }
+                        break;
+
+                    case "img":
+                        let imageMessage = [{image: message["img_url"]}]
+
+                        msgObj = {
+                            id: 0,
+                            message: message["caption"],
+                            imageMessage: imageMessage,
+                            time: "-",
+                            userType: type,
+                            isImageMessage: true,
+                            isFileMessage: false
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+                
+                
+                messageList.push(msgObj)
+            
+                
+            }
+
+
+            
+
+
+            let new_user = {
+                id: conversation["_id"]["$oid"],
+                name: conversation["client_name"],
+                profilePicture: "Null",
+                status: "offline",
+                unRead: 0,
+                isGroup: false,
+                client_number: conversation["client_number"],
+                assigned_agent: conversation["assigned_agent"],
+                messages: messageList
+            }
+
+            addapted.push(new_user)
+        }   
+
+
+        this.updateState("conversationsList", addapted)
+    }
+
+
     async search(){
-       var data = {
-            business_phone_number_id: this.user.business_number_id,
-            assigned_agent: this.state.selectedAgent,
-            client_name: this.state.clientProfileName,
-            date: this.state.selectedDate
-        }
+
+        let fullUrl = this.serverLink+"?business_phone_number_id="+this.user.business_number_id+"&assigned_agent="+this.state.selectedAgent+"&client_name="+this.state.clientProfileName+"&date="+this.state.selectedDate
+        
         
 
+        // axios.get(this.serverLink + "?key1=value4")
+        // .then(function (response){
+        //     console.log(response)
+        // })
+        // .catch(function(error){
+        //     console.log(error)
+        // })
+        // .finally(function (){
+            
+        // })
+        
         try{
-            console.log(data)
-            let response = await fetch(this.serverLink, {
-                method: "POST",
-                // mode: "no-cors",
-                body: JSON.stringify(data),
+            let response = await fetch(fullUrl, {
+                method: "GET",
                 headers:{
                     'Content-Type': 'application/json'
                 }
             });
             if(response.ok){
                 let jresponse = await response.json();
-                console.log(jresponse)
+                
+                this.addaptData(jresponse)
+
             }else{
                 console.log("something went wrong")
                 console.log(response)
@@ -70,25 +161,17 @@ class History extends Component {
             console.log(error)
         }
         
-        
-        
-        // fetch(this.serverLink, {
-        //     method: "POST",
-        //     mode: "no-cors",
-        //     body: JSON.stringify(data),
-        //     headers:{
-        //         'Content-Type': 'application/json'
-        //     }
-        // }).then(res => res.json())
-        // .catch(error => console.error("Error", error))
-        // .then(response => console.log("Success", response));
     }
+
 
     
 
-    updateDate = (dateObj) => {
-        let dateString = dateObj.getDate() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getFullYear();
-        
+    
+
+    updateDate = (Timestamp) => {
+
+        let dateString = createDateString(Timestamp)
+        console.log(dateString)
         
         this.setState({selectedDate: dateString});
     }
@@ -104,7 +187,7 @@ class History extends Component {
     }
 
     componentDidUpdate(){
-      
+        console.log(this.state.conversationsList)
     }
 
     logSate(){
@@ -151,6 +234,17 @@ class History extends Component {
 
                     </div>
 
+                    <ul className="list-unstyled chat-list chat-user-list">
+                        {this.state.conversationsList.map((conversation, key) => 
+                            <li key={key} id={conversation["id"]} style={{display: "flex"}}>
+                                <p>id: {conversation["id"]} assigned_agent: {conversation["assigned_agent"]} client name: {conversation["name"]}</p>
+
+                                <Button type="input" color="primary" onClick={() => console.log(conversation)} className="font-size-16 waves-effect waves-light" style={{marginRight: "5%", borderRadius: "1.5rem"}}>
+                                    load
+                                </Button>
+                            </li>
+                        )}
+                    </ul>
                 </div>
             </React.Fragment>
         );
