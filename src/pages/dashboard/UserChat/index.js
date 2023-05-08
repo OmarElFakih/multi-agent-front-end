@@ -298,6 +298,8 @@ function UserChat(props) {
                                                 <span className="title">{chat.body}</span>
                                             </div>
                                         </li> :
+                                        (props.recentChatList.length !== 0) ?   
+                                         
                                             (props.recentChatList[props.active_user].isGroup === true) ?
                                                 <li key={key} className={chat.userType === "sender" ? "right" : ""}>
                                                     <div className="conversation-list">
@@ -478,7 +480,13 @@ function UserChat(props) {
                                                         </div>
                                                     </div>
                                                 </li>
+                                            
+                                         
+                                        :
+                                        <></>                       
+                                            
                                     )
+                                    
                                 }
                             </ul>
                         </SimpleBar>

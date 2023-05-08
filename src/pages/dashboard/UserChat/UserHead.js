@@ -6,23 +6,25 @@ import { connect } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX, faCheck } from '@fortawesome/free-solid-svg-icons'
 
-import { openUserSidebar, setFullUser } from "../../../redux/actions";
+import { openUserSidebar, setFullUser, /*activeUser*/ } from "../../../redux/actions";
+
+import { activeUser as setActiveUser } from '../../../redux/actions';
 
 //import images
-import user from '../../../assets/images/users/avatar-4.jpg'
+//import user from '../../../assets/images/users/avatar-4.jpg'
 
 function UserHead(props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownOpen1, setDropdownOpen1] = useState(false);
     const [EndModal, setEndModal] = useState(false);
-    const [Videomodal, setVideoModal] = useState(false);
+    const [RemoveModal, setRemoveModal] = useState(false);
     const [allUsers, setAllUsers] = useState(props.chatList);
     
 
     const toggle = () => setDropdownOpen(!dropdownOpen);
     const toggle1 = () => setDropdownOpen1(!dropdownOpen1);
     const toggleEndModal = () => setEndModal(!EndModal);
-    const toggleVideoModal = () => setVideoModal(!Videomodal);
+    const toggleRemoveModal = () => setRemoveModal(!RemoveModal);
 
     const openUserSidebar = (e) => {
         e.preventDefault();
@@ -71,6 +73,27 @@ function UserHead(props) {
         toggleEndModal();
         
         
+    }
+
+
+    function removeConversation(){
+        console.log("removing")
+
+        let copyAllUsers = [...allUsers];
+
+        let id = copyAllUsers[props.activeUser].id
+
+        console.log(id)
+        
+        let filteredUsers = copyAllUsers.filter(user => user.id !== id);
+
+        console.log(filteredUsers)
+
+        props.setActiveUser(0)
+
+        props.setFullUser(filteredUsers)
+
+        toggleRemoveModal();
     }
 
 
@@ -157,7 +180,7 @@ function UserHead(props) {
                                     </DropdownMenu>                                
                                 </Dropdown>
                             </li>
-                            <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
+                            {/* <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
                                 <button type="button" onClick={toggleEndModal} className="btn nav-btn" >
                                     <i className="ri-phone-line"></i>
                                 </button>
@@ -166,7 +189,7 @@ function UserHead(props) {
                                 <button type="button" onClick={toggleVideoModal} className="btn nav-btn">
                                     <i className="ri-vidicon-line"></i>
                                 </button>
-                            </li>
+                            </li> */}
 
                             {/* <li className="list-inline-item d-none d-lg-inline-block">
                                 <Button type="button" color="none" onClick={(e) => openUserSidebar(e)} className="nav-btn user-profile-show">
@@ -180,10 +203,10 @@ function UserHead(props) {
                                         <i className="ri-more-fill"></i>
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-menu-end">
-                                        {/* <DropdownItem className="d-block d-lg-none user-profile-show" onClick={(e) => openUserSidebar(e)}>View profile <i className="ri-user-2-line float-end text-muted"></i></DropdownItem> */}
-                                        <DropdownItem>Refer conversation {/*<i className="ri-archive-line float-end text-muted"></i>*/}</DropdownItem>
-                                        <DropdownItem>Change tag {/*<i className="ri-volume-mute-line float-end text-muted"></i>*/}</DropdownItem>
-                                        <DropdownItem onClick={toggleEndModal}>End conversation {/*<i className="ri-delete-bin-line float-end text-muted"></i>*/}</DropdownItem>
+                                        <DropdownItem>Refer conversation </DropdownItem>
+                                        <DropdownItem>Change tag</DropdownItem>
+                                        <DropdownItem onClick={toggleRemoveModal}>Remove Conversation</DropdownItem>
+                                        <DropdownItem onClick={toggleEndModal}>End conversation</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
                             </li>
@@ -228,30 +251,27 @@ function UserHead(props) {
                 </ModalBody>
             </Modal>
 
-            {/* Start VideoCall Modal */}
-            <Modal tabIndex="-1" isOpen={Videomodal} toggle={toggleVideoModal} centered>
+            {/* Start Remove Modal */}
+            <Modal tabIndex="-1" isOpen={RemoveModal} toggle={toggleRemoveModal} centered>
                 <ModalBody>
                     <div className="text-center p-4">
-                        <div className="avatar-lg mx-auto mb-4">
-                            <img src={user} alt="" className="img-thumbnail rounded-circle" />
-                        </div>
 
-                        <h5 className="text-truncate">Doris Brown</h5>
-                        <p className="text-muted">Start Video Call</p>
+                        <h5 className="text-truncate">Remove Conversation?</h5>
+                        <p className="text-muted">the conversation will be removed from the chat list</p>
 
                         <div className="mt-5">
                             <ul className="list-inline mb-1">
                                 <li className="list-inline-item px-2 me-2 ms-0">
-                                    <button type="button" className="btn btn-danger avatar-sm rounded-circle" onClick={toggleVideoModal}>
-                                        <span className="avatar-title bg-transparent font-size-20">
-                                            <i className="ri-close-fill"></i>
+                                    <button type="button" className="btn btn-danger avatar-sm rounded-circle" onClick={toggleRemoveModal}>
+                                        <span className="avatar-title bg-transparent font-size-20" >
+                                            <FontAwesomeIcon icon={faX} />
                                         </span>
                                     </button>
                                 </li>
                                 <li className="list-inline-item px-2">
-                                    <button type="button" className="btn btn-success avatar-sm rounded-circle">
+                                    <button onClick={(e) => removeConversation(e)} type="button" className="btn btn-success avatar-sm rounded-circle">
                                         <span className="avatar-title bg-transparent font-size-20">
-                                            <i className="ri-vidicon-fill"></i>
+                                            <FontAwesomeIcon icon={faCheck} />
                                         </span>
                                     </button>
                                 </li>
@@ -270,4 +290,4 @@ const mapStateToProps = (state) => {
     return { ...state.Layout, users, active_user };
 };
 
-export default connect(mapStateToProps, { openUserSidebar, setFullUser })(UserHead);
+export default connect(mapStateToProps, { openUserSidebar, setFullUser, setActiveUser })(UserHead);

@@ -12,6 +12,8 @@ import { createDateString} from '../../../DateUtils/dateMethods';
 
 import {Input, Button} from "reactstrap"
 
+import { addLoggedinUser } from '../../../redux/actions';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
@@ -51,12 +53,13 @@ class History extends Component {
             console.log(conversation)
             let timestamp = parseInt(conversation["date"]);
             let convDate = new Date(timestamp * 1000)
+            let convDateString = createDateString(convDate)
 
 
             let messageList = [{
                 id: 0,
                 isNoti: true,
-                body: "this conversation took place on " + createDateString(convDate)
+                body: "this conversation took place on " + convDateString
             }]
 
 
@@ -111,6 +114,7 @@ class History extends Component {
                 status: "offline",
                 unRead: 0,
                 isGroup: false,
+                date: convDateString,
                 client_number: conversation["client_number"],
                 assigned_agent: conversation["assigned_agent"],
                 messages: messageList
@@ -237,9 +241,9 @@ class History extends Component {
                     <ul className="list-unstyled chat-list chat-user-list">
                         {this.state.conversationsList.map((conversation, key) => 
                             <li key={key} id={conversation["id"]} style={{display: "flex"}}>
-                                <p>id: {conversation["id"]} assigned_agent: {conversation["assigned_agent"]} client name: {conversation["name"]}</p>
+                                <p>id: {conversation["id"]} | date: {conversation["date"]} | assigned_agent: {conversation["assigned_agent"]} | client name: {conversation["name"]}      </p>
 
-                                <Button type="input" color="primary" onClick={() => console.log(conversation)} className="font-size-16 waves-effect waves-light" style={{marginRight: "5%", borderRadius: "1.5rem"}}>
+                                <Button type="input" color="primary" onClick={() => this.props.addLoggedinUser(conversation)} className="font-size-16 waves-effect waves-light" style={{marginRight: "5%", borderRadius: "1.5rem"}}>
                                     load
                                 </Button>
                             </li>
@@ -256,4 +260,4 @@ const mapStateToProps = (state) => {
     return { groups, active_user };
 };
 
-export default (connect(mapStateToProps)(withTranslation()(History)));
+export default (connect(mapStateToProps, {addLoggedinUser})(withTranslation()(History)));
