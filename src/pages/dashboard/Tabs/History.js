@@ -172,9 +172,8 @@ class History extends Component {
 
     
 
-    updateDate = (Timestamp) => {
-
-        let dateString = createDateString(Timestamp)
+    updateDate = (dateObj) => {
+        let dateString = dateObj === "" ? "" : createDateString(dateObj)
         console.log(dateString)
         
         this.setState({selectedDate: dateString});
@@ -232,7 +231,7 @@ class History extends Component {
 
                         <MultiAgentDatePicker onDateChange={this.updateDate}/>
 
-                        <Button type="input" color="primary" onClick={() => this.search()} className="font-size-16 waves-effect waves-light" style={{marginRight: "5%", borderRadius: "1.5rem"}}>
+                        <Button type="input" color="primary" onClick={() => this.search()} className="font-size-16 waves-effect waves-light" style={{marginRight: "5%", marginLeft: "3%", borderRadius: "1.5rem"}}>
                             <FontAwesomeIcon icon={faMagnifyingGlass} style={{marginRight: "0.5rem", marginLeft: "-0.3rem"}}/>
                         </Button>
 
