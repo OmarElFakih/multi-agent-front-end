@@ -19,10 +19,11 @@ import { openUserSidebar, setFullUser, chatUser, addLoggedinUser } from "../../.
 
 //Import Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
+// import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 
 //i18n
 import { useTranslation } from 'react-i18next';
+import { createHourString } from '../../../DateUtils/dateMethods';
 
 function UserChat(props) {
 
@@ -63,13 +64,18 @@ function UserChat(props) {
 
         //matches the message type is text, file or image, and create object according to it
         switch (type) {
+            
             case "textMessage":
+
+                let dateObj = new Date();
+
                 messageObj = {
                     id: chatMessages.length + 1,
                     message: message,
-                    time: "00:" + n,
+                    time: createHourString(dateObj),
                     userType: "sender",
-                    image: avatar4,
+                    // image: avatar4,
+                    image: "Null",
                     isFileMessage: false,
                     isImageMessage: false
                 }
@@ -80,7 +86,7 @@ function UserChat(props) {
                     client_number: props.recentChatList[props.active_user].client_number,
                     client_profile_name: props.recentChatList[props.active_user].name,
                     assigned_agent: "",
-                    timestamp: Date.now().toString(),
+                    timestamp: dateObj.getTime(),
                     sender_is_business: true,
                     body: message,
                     
@@ -157,9 +163,14 @@ function UserChat(props) {
         if (typeof e.data === 'string') {
             let message_data = JSON.parse(e.data);
             let mesObj;
-            let d = new Date();
-            let n = d.getSeconds();
+            // let d = new Date();
+            // let n = d.getSeconds();
             let update_array;
+
+            let timestamp = parseInt(message_data.timestamp);
+            let dateObj = new Date(timestamp * 1000);
+            let hourString = createHourString(dateObj);
+
 
             //an existing conversation matching the sender's number
             let found = props.recentChatList.find(user => user.client_number === message_data.client_number && user.status !== "offline");
@@ -198,7 +209,7 @@ function UserChat(props) {
                         mesObj = {
                             id: 0,
                             message: message_data.body,
-                            time: "00:" + n,
+                            time: hourString,
                             userType: type,
                             isImageMessage: false,
                             isFileMessage: false
@@ -214,7 +225,7 @@ function UserChat(props) {
                             id: 0,
                             message: message_data.caption,
                             imageMessage: imageMessage,
-                            time: "00:" + n,
+                            time: hourString,
                             userType: type,
                             isImageMessage: true,
                             isFileMessage: false
@@ -305,7 +316,14 @@ function UserChat(props) {
                                                     <div className="conversation-list">
 
                                                         <div className="chat-avatar">
-                                                            {chat.userType === "sender" ? <img src={avatar1} alt="chatvia" /> :
+                                                            {chat.userType === "sender" ? /*<img src={avatar1} alt="chatvia" />*/
+                                                                <div className="chat-user-img align-self-center me-3">
+                                                                    <div className="avatar-xs">
+                                                                        <span className="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                                            {props.user["name"] && props.user["name"].charAt(0)}
+                                                                        </span>
+                                                                    </div>
+                                                                </div> :
                                                                 props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                     <div className="chat-user-img align-self-center me-3">
                                                                         <div className="avatar-xs">
@@ -386,7 +404,14 @@ function UserChat(props) {
                                                                 </div>
                                                                 :
                                                                 <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ? <img src={avatar1} alt="chatvia" /> :
+                                                                    {chat.userType === "sender" ? /*<img src={avatar1} alt="chatvia" />*/ 
+                                                                        <div className="chat-user-img align-self-center me-3">
+                                                                            <div className="avatar-xs">
+                                                                                <span className="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                                                    {props.user["name"] && props.user["name"].charAt(0)}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>:
                                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                             <div className="chat-user-img align-self-center me-3">
                                                                                 <div className="avatar-xs">
@@ -399,7 +424,15 @@ function UserChat(props) {
                                                                     }
                                                                 </div>
                                                                 : <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ? <img src={avatar1} alt="chatvia" /> :
+                                                                    {chat.userType === "sender" ? /*<img src={avatar1} alt="chatvia" />*/ 
+                                                                    
+                                                                    <div className="chat-user-img align-self-center me-3">
+                                                                        <div className="avatar-xs">
+                                                                            <span className="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                                                {props.recentChatList[props.active_user].assigned_agent.charAt(0)}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>:
                                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                             <div className="chat-user-img align-self-center me-3">
                                                                                 <div className="avatar-xs">
@@ -470,11 +503,15 @@ function UserChat(props) {
 
                                                                 <div className="conversation-name">{chat.userType === "sender" ? 
 
-                                                                "Patricia Smith" : props.recentChatList[props.active_user].name}</div> : 
+                                                                props.recentChatList[props.active_user].assigned_agent === "none" ? props.user["name"]  : props.recentChatList[props.active_user].assigned_agent :
+                                                                
+                                                                props.recentChatList[props.active_user].name}</div> : 
 
                                                                 <div className="conversation-name">{chat.userType === "sender" ? 
                                                                 
-                                                                "Admin" : props.recentChatList[props.active_user].name}</div>
+                                                                props.recentChatList[props.active_user].assigned_agent === "none" ? props.user["name"]  : props.recentChatList[props.active_user].assigned_agent : 
+                                                                
+                                                                props.recentChatList[props.active_user].name}</div>
                                                             }
 
                                                         </div>

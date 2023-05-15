@@ -9,3 +9,9 @@ export function createDateString(dateObj){
 
     return dateString
 }
+
+
+export function createHourString(dateObj){
+    return dateObj.getHours() + ":" + dateObj.getMinutes()
+
+}

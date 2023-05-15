@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Input, InputGroup } from "reactstrap";
+import { Input, InputGroup, Nav, NavItem, NavLink} from "reactstrap";
+
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -8,6 +9,7 @@ import SimpleBar from "simplebar-react";
 
 //actions
 import { setconversationNameInOpenChat, activeUser, addLoggedinUser } from "../../../redux/actions"
+import classnames from "classnames";
 
 //components
 //import OnlineUsers from "./OnlineUsers";
@@ -20,7 +22,8 @@ class Chats extends Component {
         super(props);
         this.state = {
             searchChat: "",
-            recentChatList: this.props.recentChatList
+            recentChatList: this.props.recentChatList,
+            activeTab: "archived"
         }
         this.handleChange = this.handleChange.bind(this);
         this.openUserChat = this.openUserChat.bind(this);
@@ -41,6 +44,8 @@ class Chats extends Component {
                 recentChatList: this.props.recentChatList
             });
         }
+
+        console.log(this.state.activeTab)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -118,6 +123,11 @@ class Chats extends Component {
         }
     }
 
+    switchTab = (tabName) => {
+        console.log(tabName)
+        this.setState({activeTab: tabName})
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -135,8 +145,20 @@ class Chats extends Component {
                         {/* Search Box */}
                     </div>
 
-                    {/* online users */}
-                    {/* <OnlineUsers /> */}
+                    <div className="flex-lg-column my-auto">
+                        <Nav pills fill role='tablist'>
+                            <NavItem id='allChats'>
+                                <NavLink id='pills-allChats' className={classnames({ active: this.state.activeTab === 'allChats' })} onClick={() => {this.switchTab("allChats");}}>
+                                    All Chats
+                                </NavLink>
+                            </NavItem>
+                            <NavItem id='archiveChats'>
+                                <NavLink id='pills-archive'  className={classnames({ active: this.state.activeTab === 'archived' })} onClick={() => {this.switchTab("archived");}}>
+                                    Archived Chats
+                                </NavLink>
+                            </NavItem>
+                        </Nav>
+                    </div>
 
                     {/* Start chat-message-list  */}
                     <div className="px-2">

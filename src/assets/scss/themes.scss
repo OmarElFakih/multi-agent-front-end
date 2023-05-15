@@ -207,6 +207,14 @@
   height: 3.5rem !important;
 }
 
+.pill-selected{
+  background-color: red;
+}
+
+.pill-unselected{
+  background-color: blue;
+}
+
 
 .profile-user-dropdown{
   &.dropup {

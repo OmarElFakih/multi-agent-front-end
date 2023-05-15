@@ -7,7 +7,7 @@ import { withTranslation } from 'react-i18next';
 import Select from 'react-select'
 
 import MultiAgentDatePicker from '../../../DateUtils/MultiAgentDatePicker';
-import { createDateString} from '../../../DateUtils/dateMethods';
+import { createDateString, createHourString} from '../../../DateUtils/dateMethods';
 
 
 import {Input, Button} from "reactstrap"
@@ -54,6 +54,7 @@ class History extends Component {
             let timestamp = parseInt(conversation["date"]);
             let convDate = new Date(timestamp * 1000)
             let convDateString = createDateString(convDate)
+            let convDateHours = createHourString(convDate)
 
 
             let messageList = [{
@@ -72,7 +73,7 @@ class History extends Component {
                         msgObj = {
                             id: messageList.length,
                             message: message["body"],
-                            time: "-",
+                            time: convDateHours,
                             userType: type,
                             isImageMessage: false,
                             isFileMessage: false
@@ -86,7 +87,7 @@ class History extends Component {
                             id: 0,
                             message: message["caption"],
                             imageMessage: imageMessage,
-                            time: "-",
+                            time: convDateHours,
                             userType: type,
                             isImageMessage: true,
                             isFileMessage: false
