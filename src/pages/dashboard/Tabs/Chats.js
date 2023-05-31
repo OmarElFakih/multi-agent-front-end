@@ -17,13 +17,16 @@ import classnames from "classnames";
 // let testUser =  { id:66, name : "Test User", profilePicture : "Null", status : "online",unRead : 0, isGroup: false, number:"12345", 
 // messages: []  }
 
+let user = JSON.parse(localStorage.getItem("authUser"));
+
+
 class Chats extends Component {
     constructor(props) {
         super(props);
         this.state = {
             searchChat: "",
             recentChatList: this.props.recentChatList,
-            activeTab: "archived"
+            activeTab: "allChats"
         }
         this.handleChange = this.handleChange.bind(this);
         this.openUserChat = this.openUserChat.bind(this);
@@ -40,20 +43,29 @@ class Chats extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
+
+            let filteredChatList = this.filterByTab(this.props.recentChatList)
             this.setState({
-                recentChatList: this.props.recentChatList
+                // recentChatList: this.props.recentChatList
+                recentChatList: filteredChatList
             });
         }
 
-        console.log(this.state.activeTab)
+        
+
+        
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.recentChatList !== nextProps.recentChatList) {
+            
             this.setState({
                 recentChatList: nextProps.recentChatList,
+                
             });
         }
+
+        
     }
 
     handleChange(e) {
@@ -67,6 +79,8 @@ class Chats extends Component {
             if (conversation[i].name.toLowerCase().includes(search) || conversation[i].name.toUpperCase().includes(search))
                 filteredArray.push(conversation[i]);
         }
+
+        filteredArray = this.filterByTab(filteredArray)
 
         //set filtered items to state
         this.setState({ recentChatList: filteredArray })
@@ -125,7 +139,39 @@ class Chats extends Component {
 
     switchTab = (tabName) => {
         console.log(tabName)
-        this.setState({activeTab: tabName})
+        let filteredChatList = this.filterByTab(this.props.recentChatList, tabName)
+        this.setState({activeTab: tabName,
+                       recentChatList: filteredChatList
+                    })
+
+
+    }
+
+    filterByTab = (chatList, tabName = this.state.activeTab) => {
+
+        let filteredChats;
+
+        switch(tabName){
+
+            case "allChats": 
+                filteredChats = chatList.filter(chat => chat.isRecord === false)
+                break;
+
+            case "myChats":
+                filteredChats = chatList.filter(chat => chat.assigned_agent === user.name)
+                break;
+
+            case "archived":
+                filteredChats = chatList.filter(chat => chat.isRecord === true)
+                break;
+
+            default:
+                break;
+
+        }
+
+        return filteredChats;
+
     }
 
     render() {
@@ -152,11 +198,21 @@ class Chats extends Component {
                                     All Chats
                                 </NavLink>
                             </NavItem>
-                            <NavItem id='archiveChats'>
-                                <NavLink id='pills-archive'  className={classnames({ active: this.state.activeTab === 'archived' })} onClick={() => {this.switchTab("archived");}}>
-                                    Archived Chats
+                            <NavItem id='myChats'>
+                                <NavLink id='pills-allChats' className={classnames({ active: this.state.activeTab === 'myChats' })} onClick={() => {this.switchTab("myChats");}}>
+                                    My Chats
                                 </NavLink>
                             </NavItem>
+                            {
+                            user.role === "admin" ? 
+                                <NavItem id='archiveChats'>
+                                    <NavLink id='pills-archive'  className={classnames({ active: this.state.activeTab === 'archived' })} onClick={() => {this.switchTab("archived");}}>
+                                        Archived Chats
+                                    </NavLink>
+                                </NavItem> 
+                            : 
+                            <></>
+                            }
                         </Nav>
                     </div>
 

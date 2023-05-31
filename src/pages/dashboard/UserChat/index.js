@@ -259,6 +259,7 @@ function UserChat(props) {
 
                 let new_user = {
                     id: props.recentChatList.length,
+                    isRecord: false,
                     name: message_data.client_profile_name,
                     profilePicture: "Null",
                     status: user_status,

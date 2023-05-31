@@ -81,8 +81,8 @@ class History extends Component {
                         break;
 
                     case "img":
-                        let imageMessage = [{image: message["img_url"]}]
-
+                        let imageMessage = [{image: message["image_url"]}]
+                        console.log(message["image_url"])
                         msgObj = {
                             id: 0,
                             message: message["caption"],
@@ -110,6 +110,7 @@ class History extends Component {
 
             let new_user = {
                 id: conversation["_id"]["$oid"],
+                isRecord: true,
                 name: conversation["client_name"],
                 profilePicture: "Null",
                 status: "offline",
