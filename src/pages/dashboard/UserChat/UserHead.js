@@ -13,6 +13,8 @@ import { activeUser as setActiveUser } from '../../../redux/actions';
 //import images
 //import user from '../../../assets/images/users/avatar-4.jpg'
 
+let user = JSON.parse(localStorage.getItem("authUser"));
+
 function UserHead(props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -197,19 +199,34 @@ function UserHead(props) {
                                 </Button>
                             </li> */}
 
-                            <li className="list-inline-item">
-                                <Dropdown isOpen={dropdownOpen1} toggle={toggle1}>
-                                    <DropdownToggle className="btn nav-btn " color="none" type="button" >
-                                        <i className="ri-more-fill"></i>
-                                    </DropdownToggle>
-                                    <DropdownMenu className="dropdown-menu-end">
-                                        <DropdownItem>Refer conversation </DropdownItem>
-                                        <DropdownItem>Change tag</DropdownItem>
-                                        <DropdownItem onClick={toggleRemoveModal}>Remove Conversation</DropdownItem>
-                                        <DropdownItem onClick={toggleEndModal}>End conversation</DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
-                            </li>
+                            {[...allUsers].length > 0 ?    
+                                <li className="list-inline-item">
+                                    <Dropdown isOpen={dropdownOpen1} toggle={toggle1}>
+                                        <DropdownToggle className="btn nav-btn " color="none" type="button" >
+                                            <i className="ri-more-fill"></i>
+                                        </DropdownToggle>
+                                        <DropdownMenu className="dropdown-menu-end">
+                                            
+                                            {[...allUsers][props.activeUser].assigned_agent === user.name ?
+                                                <>
+                                                    <DropdownItem>Refer conversation </DropdownItem>
+                                                    <DropdownItem>Change tag</DropdownItem>
+                                                    <DropdownItem onClick={toggleEndModal}>End conversation</DropdownItem>
+                                                </> 
+                                                : 
+                                                <></>
+                                            }
+                                            {[...allUsers][props.activeUser].status === "offline" ?
+                                                <DropdownItem onClick={toggleRemoveModal}>Remove Conversation</DropdownItem>
+                                                :
+                                                <></>
+                                            }
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                </li>
+                                :
+                                <></>
+                            }
 
                         </ul>
                     </Col>

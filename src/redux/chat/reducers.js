@@ -4,7 +4,7 @@ import {
 
 
 //Import Images
-// import avatar2 from "../../assets/images/users/avatar-2.jpg";
+import avatar2 from "../../assets/images/users/avatar-2.jpg";
 // import avatar4 from "../../assets/images/users/avatar-4.jpg";
 // import avatar3 from "../../assets/images/users/avatar-3.jpg";
 // import avatar6 from "../../assets/images/users/avatar-6.jpg";
@@ -18,19 +18,19 @@ const INIT_STATE = {
 	active_user : 0,
     users: [
         //admin is sender and user in receiver
-        // { id : 0, name : "Patrick Hendricks", profilePicture : avatar2, status : "online", unRead : 0, roomType : "contact", isGroup: false, assigned_agent: "none", isArchive: false, 
-        //     messages: [
-                // { id: 1, message: "hi", time: "01:05", userType: "receiver", isImageMessage : false, isFileMessage : false },
-                // { id: 2, message: "hi patrick", time: "10.00", userType: "sender", isImageMessage : false, isFileMessage : false },
-                // { id: 3, message: "how's going on your project?", time: "01:05", userType: "receiver", isImageMessage : false, isFileMessage : false },
-                // { id: 4, message: "Do you need any help?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
-                // { id : 33, isNoti : true , body: "Today"},
-                // { id: 5, message: "Let me know?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
-                // { id: 6, message: "hi...Good Morning!", time: "09:05", userType: "sender", isImageMessage : false, isFileMessage : false },
-                // { id: 7, message: "texto", time: "10:30", userType: "receiver", isImageMessage : true, isFileMessage : false, imageMessage : [  { image : "https://multi-agent-bucket.s3.amazonaws.com/images/237017058792209.jpg" } ] },
-                // { id: 8, message: "please, save this pictures to your file and give it to me after you have done with editing!", time: "10:31", userType: "receiver", isImageMessage : false, isFileMessage : false },
-                // { id: 9, message: "okay sure😄👍", time: "02:50", userType: "sender", isImageMessage : false, isFileMessage : false },
-        // ] },
+        { id : 0, name : "Patrick Hendricks", profilePicture : avatar2, status : "offline", unRead : 0, roomType : "contact", isGroup: false, assigned_agent: "agent01", isRecord: false, 
+            messages: [
+                { id: 1, message: "hi", time: "01:05", userType: "receiver", isImageMessage : false, isFileMessage : false },
+                { id: 2, message: "hi patrick", time: "10.00", userType: "sender", isImageMessage : false, isFileMessage : false },
+                { id: 3, message: "how's going on your project?", time: "01:05", userType: "receiver", isImageMessage : false, isFileMessage : false },
+                { id: 4, message: "Do you need any help?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
+                { id : 33, isNoti : true , body: "Today"},
+                { id: 5, message: "Let me know?", time: "01:06", userType: "receiver", isImageMessage : false, isFileMessage : false },
+                { id: 6, message: "hi...Good Morning!", time: "09:05", userType: "sender", isImageMessage : false, isFileMessage : false },
+                { id: 7, message: "texto", time: "10:30", userType: "receiver", isImageMessage : true, isFileMessage : false, imageMessage : [  { image : "https://multi-agent-bucket.s3.amazonaws.com/images/237017058792209.jpg" } ] },
+                { id: 8, message: "please, save this pictures to your file and give it to me after you have done with editing!", time: "10:31", userType: "receiver", isImageMessage : false, isFileMessage : false },
+                { id: 9, message: "okay sure😄👍", time: "02:50", userType: "sender", isImageMessage : false, isFileMessage : false },
+        ] },
         // { id : 1, name : "Mark Messer", profilePicture : avatar3, status : "away",unRead : 2, isGroup: false,
         //     messages: [
         //         { id : 33, isToday : true },
